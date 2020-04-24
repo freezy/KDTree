@@ -21,22 +21,21 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-using UnityEngine;
-using UnityEditor;
+using Unity.Mathematics;
 
 namespace DataStructures.ViliWonka.KDTree {
 
     public class KDQueryNode {
 
         public KDNode node;
-        public Vector3 tempClosestPoint;
+        public float3 tempClosestPoint;
         public float distance;
 
         public KDQueryNode() {
 
         }
 
-        public KDQueryNode(KDNode node, Vector3 tempClosestPoint) {
+        public KDQueryNode(KDNode node, float3 tempClosestPoint) {
             this.node = node;
             this.tempClosestPoint = tempClosestPoint;
         }

@@ -21,13 +21,13 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-using System.Collections;
 using System.Collections.Generic;
+using DataStructures.ViliWonka.KDTree;
+using Unity.Mathematics;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace DataStructures.ViliWonka.Tests {
-
-    using KDTree;
     public enum QType {
 
         ClosestPoint,
@@ -48,22 +48,22 @@ namespace DataStructures.ViliWonka.Tests {
 
         public bool DrawQueryNodes = true;
 
-        public Vector3 IntervalSize = new Vector3(0.2f, 0.2f, 0.2f);
+        public float3 IntervalSize = new float3(0.2f, 0.2f, 0.2f);
 
-        Vector3[] pointCloud;
-        KDTree tree;
+        float3[] pointCloud;
+        KDTree.KDTree tree;
 
         KDQuery query;
 
         void Awake() {
 
-            pointCloud = new Vector3[20000];
+            pointCloud = new float3[20000];
 
             query = new KDQuery();
 
             for(int i = 0; i < pointCloud.Length; i++) {
 
-                pointCloud[i] = new Vector3(
+                pointCloud[i] = new float3(
 
                     (1f + Random.value * 0.25f),
                     (1f + Random.value * 0.25f),
@@ -80,16 +80,16 @@ namespace DataStructures.ViliWonka.Tests {
                 }
             }
 
-            tree = new KDTree(pointCloud, 32);
+            tree = new KDTree.KDTree(pointCloud, 32);
         }
 
-        Vector3 LorenzStep(Vector3 p) {
+        float3 LorenzStep(float3 p) {
 
             float ρ = 28f;
             float σ = 10f;
             float β = 8 / 3f;
 
-            return new Vector3(
+            return new float3(
 
                 σ * (p.y - p.x),
                 p.x * (ρ - p.z) - p.y,
@@ -113,7 +113,7 @@ namespace DataStructures.ViliWonka.Tests {
                 return;
             }
 
-            Vector3 size = 0.2f * Vector3.one;
+            float3 size = 0.2f * new float3(1, 1, 1);
 
             for(int i = 0; i < pointCloud.Length; i++) {
 
@@ -150,7 +150,7 @@ namespace DataStructures.ViliWonka.Tests {
 
                 case QType.Interval: {
 
-                    query.Interval(tree, transform.position - IntervalSize/2f, transform.position + IntervalSize/2f, resultIndices);
+                    query.Interval(tree, new float3(transform.position) - IntervalSize/2f, new float3(transform.position) + IntervalSize/2f, resultIndices);
 
                     Gizmos.DrawWireCube(transform.position, IntervalSize);
                 }

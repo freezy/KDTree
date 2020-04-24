@@ -36,6 +36,7 @@ KDQuery can query different KDTrees.
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using Unity.Mathematics;
 
 namespace DataStructures.ViliWonka.KDTree {
 
@@ -74,20 +75,20 @@ namespace DataStructures.ViliWonka.KDTree {
             return node;
         }
 
-        protected void PushToQueue(KDNode node, Vector3 tempClosestPoint) {
+        protected void PushToQueue(KDNode node, float3 tempClosestPoint) {
 
             var queryNode = PushGetQueue();
             queryNode.node = node;
             queryNode.tempClosestPoint = tempClosestPoint;
         }
 
-        protected void PushToHeap(KDNode node, Vector3 tempClosestPoint, Vector3 queryPosition) {
+        protected void PushToHeap(KDNode node, float3 tempClosestPoint, float3 queryPosition) {
 
             var queryNode = PushGetQueue();
             queryNode.node = node;
             queryNode.tempClosestPoint = tempClosestPoint;
 
-            float sqrDist = Vector3.SqrMagnitude(tempClosestPoint - queryPosition);
+            float sqrDist = math.lengthsq(tempClosestPoint - queryPosition);
             queryNode.distance = sqrDist;
             minHeap.PushObj(queryNode, sqrDist);
         }
@@ -133,7 +134,7 @@ namespace DataStructures.ViliWonka.KDTree {
 
         // Finds closest node (which doesn't necesarily contain closest point!!)
         //! TO FINISH, TRICKY MATH
-        /*public KDNode NearestNode(KDTree tree, Vector3 qPosition) {
+        /*public KDNode NearestNode(KDTree tree, float3 qPosition) {
 
             ResetStack();
 
@@ -148,7 +149,7 @@ namespace DataStructures.ViliWonka.KDTree {
             KDNode node = null;
 
 
-            Vector3[] points = tree.points;
+            float3[] points = tree.points;
             int[] permutation = tree.permutation;
 
             // searching for index that points to closest point
@@ -168,7 +169,7 @@ namespace DataStructures.ViliWonka.KDTree {
                     int partitionAxis = node.partitionAxis;
                     float partitionCoord = node.partitionCoordinate;
 
-                    Vector3 tempClosestPoint = queryNode.tempClosestPoint;
+                    float3 tempClosestPoint = queryNode.tempClosestPoint;
 
                     if((tempClosestPoint[partitionAxis] - partitionCoord) < 0) {
 
@@ -176,7 +177,7 @@ namespace DataStructures.ViliWonka.KDTree {
 
                         tempClosestPoint[partitionAxis] = partitionCoord;
 
-                        float dist = Vector3.SqrMagnitude(tempClosestPoint - qPosition);
+                        float dist = float3.SqrMagnitude(tempClosestPoint - qPosition);
 
                         if(node.positiveChild.Count != 0 && dist <= minSqrDist) {
 
@@ -190,7 +191,7 @@ namespace DataStructures.ViliWonka.KDTree {
                         tempClosestPoint[partitionAxis] = partitionCoord;
 
                         if(node.negativeChild.Count != 0 &&
-                        Vector3.SqrMagnitude(tempClosestPoint - qPosition) <= minSqrDist) {
+                        float3.SqrMagnitude(tempClosestPoint - qPosition) <= minSqrDist) {
 
                             PushGet(node.negativeChild, tempClosestPoint);
                         }
@@ -199,7 +200,7 @@ namespace DataStructures.ViliWonka.KDTree {
                 else {
 
                     // leaf node
-                    float sqrDist = Vector3.SqrMagnitude(queryNode.tempClosestPoint - qPosition);
+                    float sqrDist = float3.SqrMagnitude(queryNode.tempClosestPoint - qPosition);
 
                     if(sqrDist < minSqrDist) {
                         minSqrDist = sqrDist;

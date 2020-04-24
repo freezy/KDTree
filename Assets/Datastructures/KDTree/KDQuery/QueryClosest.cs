@@ -21,21 +21,18 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-using System.Collections.Generic;
-using UnityEngine;
 using System;
+using System.Collections.Generic;
+using Unity.Mathematics;
 
 namespace DataStructures.ViliWonka.KDTree {
-
-    using Heap;
-
     public partial class KDQuery {
 
-        public void ClosestPoint(KDTree tree, Vector3 queryPosition, List<int> resultIndices, List<float> resultDistances = null) {
+        public void ClosestPoint(KDTree tree, float3 queryPosition, List<int> resultIndices, List<float> resultDistances = null) {
 
             Reset();
 
-            Vector3[] points = tree.Points;
+            float3[] points = tree.Points;
             int[] permutation = tree.Permutation;
 
             int smallestIndex = 0;
@@ -45,7 +42,7 @@ namespace DataStructures.ViliWonka.KDTree {
 
             var rootNode = tree.RootNode;
 
-            Vector3 rootClosestPoint = rootNode.bounds.ClosestPoint(queryPosition);
+            float3 rootClosestPoint = rootNode.bounds.ClosestPoint(queryPosition);
 
             PushToHeap(rootNode, rootClosestPoint, queryPosition);
 
@@ -55,7 +52,7 @@ namespace DataStructures.ViliWonka.KDTree {
             int partitionAxis;
             float partitionCoord;
 
-            Vector3 tempClosestPoint;
+            float3 tempClosestPoint;
 
             // searching
             while(minHeap.Count > 0) {
@@ -115,7 +112,7 @@ namespace DataStructures.ViliWonka.KDTree {
 
                         int index = permutation[i];
 
-                        sqrDist = Vector3.SqrMagnitude(points[index] - queryPosition);
+                        sqrDist = math.lengthsq(points[index] - queryPosition);
 
                         if(sqrDist <= SSR) {
 

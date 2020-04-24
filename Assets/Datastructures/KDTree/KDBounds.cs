@@ -21,17 +21,17 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
+using Unity.Mathematics;
 using UnityEngine;
-using UnityEditor;
 
 namespace DataStructures.ViliWonka.KDTree {
 
     public struct KDBounds {
 
-        public Vector3 min;
-        public Vector3 max;
+        public float3 min;
+        public float3 max;
 
-        public Vector3 size {
+        public float3 size {
 
             get {
                 return max - min;
@@ -49,7 +49,7 @@ namespace DataStructures.ViliWonka.KDTree {
             }
         }
 
-        public Vector3 ClosestPoint(Vector3 point) {
+        public float3 ClosestPoint(float3 point) {
             return Bounds.ClosestPoint(point);
         }
     }

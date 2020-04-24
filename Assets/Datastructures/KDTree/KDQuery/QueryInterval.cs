@@ -22,18 +22,17 @@ SOFTWARE.
 */
 
 using System.Collections.Generic;
-using UnityEngine;
-using System;
+using Unity.Mathematics;
 
 namespace DataStructures.ViliWonka.KDTree {
 
     public partial class KDQuery {
 
-        public void Interval(KDTree tree, Vector3 min, Vector3 max, List<int> resultIndices) {
+        public void Interval(KDTree tree, float3 min, float3 max, List<int> resultIndices) {
 
             Reset();
 
-            Vector3[] points = tree.Points;
+            float3[] points = tree.Points;
             int[] permutation = tree.Permutation;
 
             var rootNode = tree.RootNode;
@@ -60,7 +59,7 @@ namespace DataStructures.ViliWonka.KDTree {
                     int partitionAxis = node.partitionAxis;
                     float partitionCoord = node.partitionCoordinate;
 
-                    Vector3 tempClosestPoint = queryNode.tempClosestPoint;
+                    float3 tempClosestPoint = queryNode.tempClosestPoint;
 
                     if((tempClosestPoint[partitionAxis] - partitionCoord) < 0) {
 
@@ -128,7 +127,7 @@ namespace DataStructures.ViliWonka.KDTree {
 
                             int index = permutation[i];
 
-                            Vector3 v = points[index];
+                            float3 v = points[index];
 
                             if(v[0] >= min[0]
                             && v[1] >= min[1]
